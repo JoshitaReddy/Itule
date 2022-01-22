@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jan 22 19:39:41 2022
+
+@author: Keerthika
+"""
+
 import numpy as np
 from flask import Flask, request, jsonify
 import pickle
@@ -9,7 +16,7 @@ import pandas as pd
 model = pickle.load(open('model.pkl', 'rb'))
 print('model is loaded')
 app = Flask(__name__)
-dataset = pd.read_csv('Wellbeing_and_lifestyle_.csv')
+dataset = pd.read_csv('Wellbeing_and_lifestyle_data_Kaggle.csv')
 
 @app.route('/',methods=['GET'])
 def index():
@@ -62,13 +69,8 @@ def index():
           AGE,
           GENDER]]
     test=ct.transform(test)
-    #pred=model.predict(np.array([test]).reshape(1,-1))
     pred=model.predict(test)
-    return jsonify(str(round(pred[0],2)))
-'''
-?FRUITS_VEGGIES=5&DAILY_STRESS=4&PLACES_VISITED=0&CORE_CIRCLE=2&SUPPORTING_OTHERS=10&SOCIAL_NETWORK=10&ACHIEVEMENT=5
-&DONATION=1&BMI_RANGE=2&TODO_COMPLETED=7&FLOW=4&DAILY_STEPS=1&LIVE_VISION=5&SLEEP_HOURS=8&LOST_VACATION=5&DAILY_SHOUTING=2&SUFFICIENT_INCOME=2&PERSONAL_AWARDS=1&TIME_FOR_PASSION=8&WEEKLY_MEDITATION=4&AGE=28&GENDER=1
-'''
+    return jsonify(prediction=str(round(pred[0],2)))
 
 if __name__ == "__main__":
     app.run(debug=True)
